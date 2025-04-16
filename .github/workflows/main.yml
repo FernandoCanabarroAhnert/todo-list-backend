@@ -37,13 +37,20 @@ jobs:
       with:
         context: .
         dockerfile: Dockerfile
-        build-args: |
+        secrets: |
           SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
           MONGO_DATABASE_URL=${{ secrets.MONGO_DATABASE_URL }}
         push: false
         tags: |
           ${{ secrets.DOCKER_HUB_USERNAME }}/todo-list-backend:latest 
           ${{ secrets.DOCKER_HUB_USERNAME }}/todo-list-backend:${{ github.run_id }}
+
+    - name: Docker Compose Build
+      working-directory: ./docker
+      run: |
+        docker compose build \
+          --build-arg SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }} \
+          --build-arg MONGO_DATABASE_URL=${{ secrets.MONGO_DATABASE_URL }}
 
     - name: Push to Docker Hub Container Registry
       run: |
