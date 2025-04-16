@@ -37,9 +37,9 @@ jobs:
       with:
         context: .
         dockerfile: Dockerfile
-        secrets: |
-          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-          MONGO_DATABASE_URL: ${{secrets.MONGO_DATABASE_URL}}
+        build-args: |
+          SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
+          MONGO_DATABASE_URL=${{ secrets.MONGO_DATABASE_URL }}
         push: false
         tags: |
           ${{ secrets.DOCKER_HUB_USERNAME }}/todo-list-backend:latest 
