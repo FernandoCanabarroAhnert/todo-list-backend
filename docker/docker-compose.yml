@@ -1,16 +1,52 @@
 version: "3.7"
+
 services:
-   fullstack-ecommerce-app:
-    image: fernandocanabarroahnert/fullstack-ecommerce-app
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    hostname: traefik
     restart: always
-    build: 
-      context: ../
-      dockerfile: Dockerfile
-    working_dir: /app
-    ports: 
-      - 8080:8080
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.docker.exposedbydefault=false"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt:/letsencrypt
     networks:
-      - dev-network
+      dev-network:
+
+  todo-list-backend:
+    image: fernandocanabarroahnert/todo-list-backend
+    container_name: todo-list-backend
+    restart: always
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.todo.rule=Host(`todos.fernandocanabarrodev.tech`)"
+      - "traefik.http.routers.todo.entrypoints=websecure"
+      - "traefik.http.routers.todo.tls.certresolver=letsencrypt"
+      - "traefik.http.services.todo.loadbalancer.server.port=8080"
+    networks:
+      dev-network:
+
 networks:
   dev-network:
     driver: bridge
+
+volumes:
+  letsencrypt:
