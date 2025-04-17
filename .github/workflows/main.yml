@@ -46,13 +46,6 @@ jobs:
           ${{ secrets.DOCKER_HUB_USERNAME }}/todo-list-backend:latest 
           ${{ secrets.DOCKER_HUB_USERNAME }}/todo-list-backend:${{ github.run_id }}
 
-    # - name: Docker Compose Build
-    #   working-directory: ./docker
-    #   run: |
-    #     docker compose build \
-    #       --build-arg SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }} \
-    #       --build-arg MONGO_DATABASE_URL=${{ secrets.MONGO_DATABASE_URL }}
-
     - name: Push to Docker Hub Container Registry
       run: |
         docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/todo-list-backend:latest ${{ secrets.DOCKER_HUB_USERNAME }}/todo-list-backend:${{ github.run_id }}
@@ -66,6 +59,6 @@ jobs:
       - name: Update application image
         run: |
           cd /root
-          sudo docker compose pull oak-desafio-app
-          sudo docker compose rm -fs oak-desafio-app
-          sudo docker compose up -d oak-desafio-app
+          sudo docker compose pull oak-app
+          sudo docker compose rm -fs oak-app
+          sudo docker compose up -d oak-app
