@@ -1,6 +1,4 @@
-FROM openjdk:21-jdk-buster
-
-RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+FROM openjdk:21-jdk
 
 ARG MONGO_DATABASE_URL
 ARG SENDGRID_API_KEY

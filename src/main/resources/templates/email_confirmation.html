@@ -28,8 +28,6 @@
             display: block;
             text-align: center;
             margin-top: 20px;
-        }
-        .link a {
             display: inline-block;
             padding: 10px 20px;
             background-color: #FF6767;
@@ -46,9 +44,7 @@
     <p class="greeting" th:text="'Olá ' + ${username} + ','"></p>
     <p>Obrigado por se registrar! Por favor, utilize o código de ativação a seguir para ativar sua conta:</p>
     <div class="code"><span th:text="${code}"></span></div>
-    <div class="link">
-        <a target="http://localhost:4200/activate-account">Ativar sua conta</a>
-    </div>
+    <a class="link" href="http://localhost:4200/activate-account" target="_blank">Ativar sua conta</a>
 </div>
 </body>
 </html>
