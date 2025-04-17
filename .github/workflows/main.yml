@@ -59,6 +59,6 @@ jobs:
       - name: Update application image
         run: |
           cd /root
-          sudo docker compose pull oak-app
-          sudo docker compose rm -fs oak-app
-          sudo docker compose up -d oak-app
+          sudo docker compose pull todo-list-backend
+          sudo docker compose rm -fs todo-list-backend
+          sudo docker compose up -d todo-list-backend
